@@ -1,38 +1,51 @@
-#include <stdio.h>
-#include <string.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
 
-void main()
-{
-FILE *input, *output;
-char line[100];
-int lctr;
-char stad[6];
-
-input=fopen("in.txt", "r");
-output=fopen("output.txt", "w");
-
-while (!feof(input))
-{
-    fscanf(input, "%s", line);
-    if (line[0]=='H')
+int main()
     {
-    continue;
-    }
-    else if (line[0]=='T')
-    {
-    memcpy(stad, &line[1], 6);
-    stad[6]='\0';
-    lctr=(int)strtol(stad, NULL, 16);
-    int i=9;
-    while(line[i]!='\0')
+        char input[10], inp[10], start[10],pn[10];
+        int address;
+        FILE *fp1, *fp2;
+        fp1=fopen("input.txt","r");
+        fp2=fopen("output.txt","w");
+
+        fscanf(fp1,"%s",input);
+
+        while(strcmp(input,"E")!=0)
         {
-        fprintf(output, "%x %c%c\n", lctr, line[i], line[i+1]);
-        i+=2;
-        lctr++;
+            if(strcmp(input,"H")==0)
+            {
+		fscanf(fp1,"%s",pn);
+                fscanf(fp1,"%s",start);
+                fscanf(fp1,"%s",inp);
+                fscanf(fp1,"%s",input);
+            }
+
+            else if(strcmp(input,"T")==0)
+            {
+                fscanf(fp1,"%x",&address);
+                fscanf(fp1,"%s",input);
+		fscanf(fp1,"%s",input); //if input doesnt have hex after the address, omit this line
+                continue;
+            }
+            else if (strlen(input)>2)
+            {
+                fprintf(fp2,"%06x\t%c%c\n",address++,input[0],input[1]);
+                fprintf(fp2,"%06x\t%c%c\n",address++,input[2],input[3]);
+                fprintf(fp2,"%06x\t%c%c\n",address++,input[4],input[5]);
+                fscanf(fp1,"%s",input);
+            }
+		
+	else
+			{
+				fprintf(fp2,"%06x\t%c%c\n",address++,input[0],input[1]);
+				fscanf(fp1,"%s",input);
+			}
+				
         }
+        fclose(fp1);
+        fclose(fp2);
+        printf("*****FINISHED*******");
+        return 0;
     }
-    
-}
-fclose(input);
-fclose(output);
-}

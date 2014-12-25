@@ -1,0 +1,14 @@
+CALC    START   1000
+SUM     MACRO   **
+LDA     #5      **
+$CLOOP  ADD     #10
+JEQ     $CLOOP  **
+**      MEND    **
+LOOP    LDA     LENGTH
+COMP    ZERO    **
+JEQ     LOOP    **
+**      SUM     **
+LENGTH  WORD    5
+ZERO    WORD    0
+**      SUM     **
+**      END
